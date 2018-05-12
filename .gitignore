@@ -1,2 +1,4 @@
 node_modules/
 playground/
+.vscode/temp.sql
+.vscode/last.sql

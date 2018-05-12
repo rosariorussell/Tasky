@@ -4,8 +4,16 @@ const request = require('supertest')
 const {app} = require('./../server')
 const {Task} = require('./../models/task')
 
+const tasks = [{
+  text: 'First test task'
+}, {
+  text: 'Second test task'
+}]
+
 beforeEach((done) => {
-  Task.remove({}).then(() => done())
+  Task.remove({}).then(() => {
+    return Task.insertMany(tasks)
+  }).then(() => done())
 })
 
 describe('POST /tasks', () => {
@@ -24,7 +32,7 @@ describe('POST /tasks', () => {
           return done(err)
         }
 
-        Task.find().then((tasks) => {
+        Task.find({text}).then((tasks) => {
           expect(tasks.length).toBe(1)
           expect(tasks[0].text).toBe(text)
           done()
@@ -43,9 +51,21 @@ describe('POST /tasks', () => {
         }
 
         Task.find().then((tasks) => {
-          expect(tasks.length).toBe(0)
+          expect(tasks.length).toBe(2)
           done()
         }).catch((e) => done(e))
       })
+  })
+})
+
+describe('Get /tasks', () => {
+  it('should get all tasks', (done) => {
+    request(app)
+      .get('/tasks')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.tasks.length).toBe(2)
+      })
+      .end(done)
   })
 })
