@@ -30,7 +30,6 @@ app.get('/tasks', (req, res) => {
   })
 })
 
-// GET /tasks/1234
 app.get('/tasks/:id', (req, res) => {
   var id = req.params.id
 
