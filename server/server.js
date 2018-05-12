@@ -7,6 +7,7 @@ var {Task} = require('./models/task')
 var {User} = require('./models/user')
 
 var app = express()
+const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
@@ -48,8 +49,8 @@ app.get('/tasks/:id', (req, res) => {
   })
 })
 
-app.listen(3000, () => {
-  console.log('Started on port 3000')
+app.listen(port, () => {
+  console.log(`Start on port ${port}`)
 })
 
 module.exports = {app}
