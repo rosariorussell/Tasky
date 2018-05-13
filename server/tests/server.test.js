@@ -100,3 +100,42 @@ describe('GET /tasks/:id', () => {
       .end(done)
   })
 })
+
+describe('DELETE /tasks/:id', () => {
+  it('should remove a task', (done) => {
+    var hexId = tasks[1]._id.toHexString()
+
+    request(app)
+      .delete(`/tasks/${hexId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.task._id).toBe(hexId)
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err)
+        }
+
+        Task.findById(hexId).then((task) => {
+          expect(task).toNotExist()
+          done()
+        }).catch((e) => done(e))
+      })
+  })
+
+  it('should return 404 if todo not found', (done) => {
+    var hexId = new ObjectID().toHexString()
+
+    request(app)
+      .delete(`/tasks/${hexId}`)
+      .expect(404)
+      .end(done)
+  })
+
+  it('should return 404 if object id is invalid', (done) => {
+    request(app)
+      .delete('/tasks/123')
+      .expect(404)
+      .end(done)
+  })
+})
