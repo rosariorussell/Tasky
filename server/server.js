@@ -1,6 +1,7 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var {ObjectID} = require('mongodb')
+const _ = require('lodash')
+const express = require('express')
+const bodyParser = require('body-parser')
+const {ObjectID} = require('mongodb')
 
 var {mongoose} = require('./db/mongoose')
 var {Task} = require('./models/task')
@@ -57,6 +58,32 @@ app.delete('/tasks/:id', (req, res) => {
   }
 
   Task.findByIdAndRemove(id).then((task) => {
+    if (!task) {
+      return res.status(404).send()
+    }
+
+    res.send({task})
+  }).catch((e) => {
+    res.status(400).send()
+  })
+})
+
+app.patch('/tasks/:id', (req, res) => {
+  var id = req.params.id
+  var body = _.pick(req.body, ['text', 'completed'])
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send()
+  }
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime()
+  } else {
+    body.completed = false
+    body.completedAt = null
+  }
+
+  Task.findByIdAndUpdate(id, {$set: body}, {new: true}).then((task) => {
     if (!task) {
       return res.status(404).send()
     }
