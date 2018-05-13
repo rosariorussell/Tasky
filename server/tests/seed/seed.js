@@ -18,23 +18,17 @@ const users = [{
 }, {
   _id: userTwoId,
   email: "rusty@example.com",
-  password: 'userTwoPass',
-  tokens: [{
-    access: 'auth',
-    token: jwt.sign({_id: userTwoId, access: 'auth'}, '123456').toString()
-  }]
+  password: 'userTwoPass'
 }]
 
 const tasks = [{
   _id: new ObjectID(),
-  text: 'First test task',
-  _creator: userOneId
+  text: 'First test task'
 }, {
   _id: new ObjectID(),
   text: 'Second test task',
   completed: true,
-  completedAt: 123,
-  _creator: userTwoId
+  completedAt: 123
 }]
 
 const populateTasks = (done) => {
