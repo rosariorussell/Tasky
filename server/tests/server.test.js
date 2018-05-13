@@ -10,7 +10,9 @@ const tasks = [{
   text: 'First test task'
 }, {
   _id: new ObjectID(),
-  text: 'Second test task'
+  text: 'Second test task',
+  completed: true,
+  completedAt: 123
 }]
 
 beforeEach((done) => {
@@ -136,6 +138,46 @@ describe('DELETE /tasks/:id', () => {
     request(app)
       .delete('/tasks/123')
       .expect(404)
+      .end(done)
+  })
+})
+
+describe('PATCH /tasks/:id', () => {
+  it('should update the task', (done) => {
+    var hexId = tasks[0]._id.toHexString()
+    var text = 'This should be the new text'
+
+    request(app)
+      .patch(`/tasks/${hexId}`)
+      .send({
+        completed: true,
+        text
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.task.text).toBe(text)
+        expect(res.body.task.completed).toBe(true)
+        expect(res.body.task.completedAt).toBeA('number')
+      })
+      .end(done)
+  })
+
+  it('should clear completedAt when task is not completed', (done) => {
+    var hexId = tasks[1]._id.toHexString()
+    var text = 'This should be the new text (2nd task)'
+
+    request(app)
+      .patch(`/tasks/${hexId}`)
+      .send({
+        completed: false,
+        text
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.task.text).toBe(text)
+        expect(res.body.task.completed).toBe(false)
+        expect(res.body.task.completedAt).toNotExist()
+      })
       .end(done)
   })
 })
