@@ -74,6 +74,7 @@ UserSchema.statics.findByToken = function (token) {
 }
 
 // Perform functions before saving to the model
+// Only hash password when password is being modified
 UserSchema.pre('save', function(next) {
   var user = this
 
