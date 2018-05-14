@@ -1,16 +1,18 @@
+// Module dependencies
 const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const {ObjectID} = require('mongodb')
 
+// Model dependencies
 var {mongoose} = require('./../config/mongoose')
 var {Task} = require('./../models/task')
 var {User} = require('./../models/user')
 var {authenticate} = require('./authenticate')
 
-var router = express.Router();
+var app = express()
 
-router.post('/tasks', authenticate, (req, res) => {
+app.post('/tasks', authenticate, (req, res) => {
   var task = new Task({
     text: req.body.text,
     _creator: req.user._id
@@ -23,7 +25,7 @@ router.post('/tasks', authenticate, (req, res) => {
   })
 })
 
-router.get('/tasks', authenticate, (req, res) => {
+app.get('/tasks', authenticate, (req, res) => {
   Task.find({
     _creator: req.user._id
   }).then((tasks) => {
@@ -33,7 +35,7 @@ router.get('/tasks', authenticate, (req, res) => {
   })
 })
 
-router.get('/tasks/:id', authenticate, (req, res) => {
+app.get('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
 
   if (!ObjectID.isValid(id)) {
@@ -54,7 +56,7 @@ router.get('/tasks/:id', authenticate, (req, res) => {
   })
 })
 
-router.delete('/tasks/:id', authenticate, (req, res) => {
+app.delete('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
 
   if (!ObjectID.isValid(id)) {
@@ -75,7 +77,7 @@ router.delete('/tasks/:id', authenticate, (req, res) => {
   })
 })
 
-router.patch('/tasks/:id', authenticate,  (req, res) => {
+app.patch('/tasks/:id', authenticate,  (req, res) => {
   var id = req.params.id
   var body = _.pick(req.body, ['text', 'completed'])
 
@@ -101,7 +103,7 @@ router.patch('/tasks/:id', authenticate,  (req, res) => {
   })
 })
 
-router.post('/users', (req, res) => {
+app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
   var user = new User(body)
 
@@ -114,11 +116,11 @@ router.post('/users', (req, res) => {
   })
 })
 
-router.get('/users/me', authenticate, (req, res) => {
+app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user)
 })
 
-router.post('/users/login', (req, res) => {
+app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
 
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -130,7 +132,7 @@ router.post('/users/login', (req, res) => {
   })
 })
 
-router.delete('/users/me/token', authenticate, (req, res) => {
+app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
     res.status(200).send()
   }), () => {
@@ -138,4 +140,4 @@ router.delete('/users/me/token', authenticate, (req, res) => {
   }
 })
 
-module.exports = router;
+module.exports = app;
