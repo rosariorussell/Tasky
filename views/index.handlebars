@@ -1,3 +1,152 @@
-<a href="/users">New User</a>
+<a href="/register">New User</a> || <a href="/login">Login</a> || <a href="/login" id="logoutButton">Logout</a>
 
-<a href="/users/login">Login</a>
+<br>
+<br>
+
+<input type="submit" value="Show tasks in console" id="showTasks">
+
+<br>
+<br>
+
+  <form>
+    <input type="text" name="text" id="text1-field" placeholder="task description">
+    <input type="submit" value="Add a task" id="addTask">
+  </form>
+
+<br>
+
+  <form>
+    <input type="text" name="id" id="id2-field" placeholder="task id">
+    <input type="submit" value="Delete a task" id="deleteTask">
+  </form>
+
+<br>
+
+  <form>
+    <input type="text" name="id" id="id3-field" placeholder="task id">
+    <input type="submit" value="Complete a task" id="completeTask">
+  </form>
+
+
+<br>
+
+  <form>
+    <input type="text" name="id" id="id4-field" placeholder="task id">
+    <input type="text" name="text" id="text4-field" placeholder="updated task description">    
+    <input type="submit" value="Update a task" id="updateTask">
+  </form>
+
+<script>
+  $(function () {
+
+
+    $("#showTasks").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      $.ajax("/tasks", {
+        type: "GET",
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          console.log(data)
+          // var auth = xhr.getResponseHeader('x-auth')
+          // localStorage.setItem("x-auth", auth)
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+    $("#logoutButton").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      $.ajax("/users/me/token", {
+        type: "DELETE",
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          console.log(data)
+          // var auth = xhr.getResponseHeader('x-auth')
+          localStorage.setItem("x-auth", "")
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+
+    $("#addTask").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      $.ajax("/tasks", {
+        type: "POST",
+        data: {
+            text: $("#text1-field").val().trim()
+          },
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          $("#text1-field").val('')
+          // var auth = xhr.getResponseHeader('x-auth')
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+        $("#deleteTask").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      var id = $("#id2-field").val().trim()
+      $.ajax("/tasks/" + id, {
+        type: "DELETE",
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          $("#id2-field").val('')
+          // var auth = xhr.getResponseHeader('x-auth')
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+        $("#completeTask").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      var id = $("#id3-field").val().trim()
+      $.ajax("/tasks/" + id, {
+        type: "PATCH",
+        data: {
+          completed: true
+        },
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          $("#id3-field").val('')
+          // var auth = xhr.getResponseHeader('x-auth')
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+        $("#updateTask").on("click", function (event) {
+      event.preventDefault()
+      var xAuth = localStorage.getItem("x-auth")
+      var id = $("#id4-field").val().trim()      
+      $.ajax("/tasks/" + id, {
+        type: "PATCH",
+        data: {
+            text: $("#text4-field").val().trim()            
+          },
+        headers: { 'x-auth': xAuth },
+        success: function (data, status, xhr) {
+          $("#id4-field").val('')
+          $("#text4-field").val('')          
+          // var auth = xhr.getResponseHeader('x-auth')
+          // console.log(localStorage.getItem("x-auth"))
+          // window.location.href = '/mytasks'
+        }
+      })
+    })
+
+
+
+  })
+</script>
