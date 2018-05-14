@@ -5,7 +5,7 @@ const {ObjectID} = require('mongodb')
 const {app} = require('./../server')
 const {Task} = require('./../models/task')
 const {User} = require('./../models/user')
-const {tasks, populateTasks, users, populateUsers} = require('./seed/seed')
+const {tasks, populateTasks, users, populateUsers} = require('./seed')
 
 // Populate test database with seed data from seed file
 beforeEach(populateUsers)

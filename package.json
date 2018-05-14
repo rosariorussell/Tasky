@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js",
-    "test": "SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
-    "test-watch": "nodemon --exec npm test"
+    "start": "node server.js",
+    "test": "SET \"NODE_ENV=test\" && mocha tests/*test.js"
   },
   "engines": {
     "node": "8.9.4"
@@ -17,6 +16,7 @@
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.15.0",
     "mongodb": "^2.2.5",
