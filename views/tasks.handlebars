@@ -3,3 +3,20 @@
       {{> task sleep=true}}
     {{/unless}}
   {{/each}}
+
+  <button type="submit" id="myButton">Get my task</button>
+  	<script>
+		$("document").ready(function () {
+			$("#myButton").on("click", function (event) {
+				event.preventDefault
+				$.ajax("/tasks", {
+					type: "GET",
+					headers: {
+						'x-auth': localStorage.getItem('first')
+					}}).then((result) => {
+						console.log(result.tasks)
+					})
+			})
+		})
+
+	</script>
