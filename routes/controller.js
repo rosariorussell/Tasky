@@ -80,6 +80,7 @@ app.delete('/tasks/:id', authenticate, (req, res) => {
 app.patch('/tasks/:id', authenticate,  (req, res) => {
   var id = req.params.id
   var body = _.pick(req.body, ['text', 'completed'])
+  body.completed = JSON.parse(body.completed)
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send()
@@ -106,6 +107,7 @@ app.patch('/tasks/:id', authenticate,  (req, res) => {
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
   var user = new User(body)
+  console.log(body)
 
   user.save().then(() => {
     return user.generateAuthToken()

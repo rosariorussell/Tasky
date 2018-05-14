@@ -11,7 +11,5 @@ module.exports = function(app) {
     res.render("login")
   })
 
-  app.get('/mytasks', (req, res) => {
-    res.render("tasks")
-  })
+
 }
