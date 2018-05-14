@@ -1,7 +1,5 @@
 node_modules/
-playground/
 .vscode/temp.sql
 .vscode/last.sql
 .eslintrc.json
-.eslintrc.json
-server/config/config.json
+config/config.json

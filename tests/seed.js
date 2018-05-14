@@ -1,8 +1,8 @@
 const {ObjectID} = require('mongodb')
 const jwt = require('jsonwebtoken')
 
-const {Task} = require('./../../models/task')
-const {User} = require('./../../models/user')
+const {Task} = require('./../models/task')
+const {User} = require('./../models/user')
 
 const userOneId = new ObjectID()
 const userTwoId = new ObjectID()
