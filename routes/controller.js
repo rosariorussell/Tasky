@@ -12,10 +12,6 @@ var {authenticate} = require('./authenticate')
 
 var router = express.Router();
 
-router.get('/', (req, res) => {
-  res.render("index")
-})
-
 router.post('/tasks', authenticate, (req, res) => {
   var task = new Task({
     text: req.body.text,

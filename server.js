@@ -12,10 +12,12 @@ app.use(bodyParser.json())
 var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+app.use(express.static("./public"))
 
 // add routes
-var routes = require("./routes/routes");
-app.use(routes);
+require("./routes/html-routes")(app)
+var controller = require("./routes/controller");
+app.use(controller);
 
 // start server
 app.listen(port, () => {
