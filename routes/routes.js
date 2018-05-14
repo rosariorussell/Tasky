@@ -1,14 +1,20 @@
+// Module dependencies
 const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const {ObjectID} = require('mongodb')
 
+// Model dependencies
 var {mongoose} = require('./../config/mongoose')
 var {Task} = require('./../models/task')
 var {User} = require('./../models/user')
 var {authenticate} = require('./authenticate')
 
 var router = express.Router();
+
+router.get('/', (req, res) => {
+  res.render("index")
+})
 
 router.post('/tasks', authenticate, (req, res) => {
   var task = new Task({
