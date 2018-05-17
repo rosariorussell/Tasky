@@ -13,24 +13,24 @@ beforeEach(populateTasks)
 
 describe('POST /tasks', () => {
   it('should create a new task', (done) => {
-    var text = 'Test task text'
+    var title = 'Test task text'
 
     request(app)
       .post('/tasks')
       .set('x-auth', users[0].tokens[0].token)
-      .send({ text })
+      .send({ title })
       .expect(200)
       .expect((res) => {
-        expect(res.body.text).toBe(text)
+        expect(res.body.title).toBe(title)
       })
       .end((err, res) => {
         if (err) {
           return done(err)
         }
 
-        Task.find({ text }).then((tasks) => {
+        Task.find({ title }).then((tasks) => {
           expect(tasks.length).toBe(1)
-          expect(tasks[0].text).toBe(text)
+          expect(tasks[0].title).toBe(title)
           done()
         }).catch((e) => done(e))
       })
@@ -75,7 +75,7 @@ describe('GET /tasks/:id', () => {
       .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
-        expect(res.body.task.text).toBe(tasks[0].text)
+        expect(res.body.task.title).toBe(tasks[0].title)
       })
       .end(done)
   })
@@ -171,20 +171,20 @@ describe('DELETE /tasks/:id', () => {
 describe('PATCH /tasks/:id', () => {
   it('should update the task', (done) => {
     var hexId = tasks[0]._id.toHexString()
-    var text = 'This should be the new text'
+    var title = 'This should be the new text'
 
     request(app)
       .patch(`/tasks/${hexId}`)
       .set('x-auth', users[0].tokens[0].token)
       .send({
-        completed: true,
-        text
+        title: title,
+        completed: true
       })
       .expect(200)
       .expect((res) => {
-        expect(res.body.task.text).toBe(text)
+        expect(res.body.task.title).toBe(title)
         expect(res.body.task.completed).toBe(true)
-        expect(res.body.task.completedAt).toBeA('number')
+        expect(res.body.task.completedAt).toBeA('string')
       })
       .end(done)
   })

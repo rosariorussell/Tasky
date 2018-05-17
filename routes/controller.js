@@ -14,9 +14,18 @@ var app = express()
 
 app.post('/tasks', authenticate, (req, res) => {
   var task = new Task({
-    text: req.body.text,
+    title: req.body.title,
     _creator: req.user._id
   })
+  if (req.body.text) {
+    task.text = req.body.text
+  }
+  if (req.body.title) {
+    task.title = req.body.title
+  }
+  if (req.body.dueDate) {
+    task.dueDate = req.body.dueDate
+  }
 
   task.save().then((doc) => {
     res.send(doc)
@@ -79,17 +88,18 @@ app.delete('/tasks/:id', authenticate, (req, res) => {
 
 app.patch('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
-  var body = _.pick(req.body, ['text', 'completed'])
-  if (body.completed) {
-    body.completed = JSON.parse(body.completed)
-  }
+  var body = _.pick(req.body, ['title', 'text', 'tags', 'completed', 'dueDate'])
+
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send()
   }
 
+  if (body.completed) {
+    body.completed = JSON.parse(body.completed)
+  }
   if (_.isBoolean(body.completed) && body.completed) {
-    body.completedAt = new Date().getTime()
+    body.completedAt = new Date()
   } else {
     body.completed = false
     body.completedAt = null
