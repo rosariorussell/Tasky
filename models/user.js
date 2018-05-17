@@ -107,7 +107,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
 // Only hash password when password is being modified
 UserSchema.pre('save', function (next) {
   var user = this
-  console.log('this worked')
 
   if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {

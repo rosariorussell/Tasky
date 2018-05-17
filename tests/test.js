@@ -1,11 +1,11 @@
 const expect = require('expect')
 const request = require('supertest')
-const {ObjectID} = require('mongodb')
+const { ObjectID } = require('mongodb')
 
-const {app} = require('./../server')
-const {Task} = require('./../models/task')
-const {User} = require('./../models/user')
-const {tasks, populateTasks, users, populateUsers} = require('./seed')
+const { app } = require('./../server')
+const { Task } = require('./../models/task')
+const { User } = require('./../models/user')
+const { tasks, populateTasks, users, populateUsers } = require('./seed')
 
 // Populate test database with seed data from seed file
 beforeEach(populateUsers)
@@ -18,7 +18,7 @@ describe('POST /tasks', () => {
     request(app)
       .post('/tasks')
       .set('x-auth', users[0].tokens[0].token)
-      .send({text})
+      .send({ text })
       .expect(200)
       .expect((res) => {
         expect(res.body.text).toBe(text)
@@ -28,7 +28,7 @@ describe('POST /tasks', () => {
           return done(err)
         }
 
-        Task.find({text}).then((tasks) => {
+        Task.find({ text }).then((tasks) => {
           expect(tasks.length).toBe(1)
           expect(tasks[0].text).toBe(text)
           done()
@@ -39,7 +39,7 @@ describe('POST /tasks', () => {
   it('should not create task with invalid body data', (done) => {
     request(app)
       .post('/tasks')
-      .set('x-auth', users[0].tokens[0].token)      
+      .set('x-auth', users[0].tokens[0].token)
       .send({})
       .expect(400)
       .end((err, res) => {
@@ -72,7 +72,7 @@ describe('GET /tasks/:id', () => {
   it('should return task doc', (done) => {
     request(app)
       .get(`/tasks/${tasks[0]._id.toHexString()}`)
-      .set('x-auth', users[0].tokens[0].token)      
+      .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
         expect(res.body.task.text).toBe(tasks[0].text)
@@ -83,7 +83,7 @@ describe('GET /tasks/:id', () => {
   it('should not return task doc created by a different user', (done) => {
     request(app)
       .get(`/tasks/${tasks[1]._id.toHexString()}`)
-      .set('x-auth', users[0].tokens[0].token)      
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end(done)
   })
@@ -93,7 +93,7 @@ describe('GET /tasks/:id', () => {
 
     request(app)
       .get(`/tasks/${hexId}`)
-      .set('x-auth', users[0].tokens[0].token)      
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end(done)
   })
@@ -101,7 +101,7 @@ describe('GET /tasks/:id', () => {
   it('should return 404 for non-object ids', (done) => {
     request(app)
       .get('/tasks/123')
-      .set('x-auth', users[0].tokens[0].token)      
+      .set('x-auth', users[0].tokens[0].token)
       .expect(404)
       .end(done)
   })
@@ -154,7 +154,7 @@ describe('DELETE /tasks/:id', () => {
 
     request(app)
       .delete(`/tasks/${hexId}`)
-      .set('x-auth', users[1].tokens[0].token)      
+      .set('x-auth', users[1].tokens[0].token)
       .expect(404)
       .end(done)
   })
@@ -162,7 +162,7 @@ describe('DELETE /tasks/:id', () => {
   it('should return 404 if object id is invalid', (done) => {
     request(app)
       .delete('/tasks/123')
-      .set('x-auth', users[1].tokens[0].token)      
+      .set('x-auth', users[1].tokens[0].token)
       .expect(404)
       .end(done)
   })
@@ -175,7 +175,7 @@ describe('PATCH /tasks/:id', () => {
 
     request(app)
       .patch(`/tasks/${hexId}`)
-      .set('x-auth', users[0].tokens[0].token)            
+      .set('x-auth', users[0].tokens[0].token)
       .send({
         completed: true,
         text
@@ -195,7 +195,7 @@ describe('PATCH /tasks/:id', () => {
 
     request(app)
       .patch(`/tasks/${hexId}`)
-      .set('x-auth', users[1].tokens[0].token)            
+      .set('x-auth', users[1].tokens[0].token)
       .send({
         completed: true,
         text
@@ -210,7 +210,7 @@ describe('PATCH /tasks/:id', () => {
 
     request(app)
       .patch(`/tasks/${hexId}`)
-      .set('x-auth', users[1].tokens[0].token)                  
+      .set('x-auth', users[1].tokens[0].token)
       .send({
         completed: false,
         text
@@ -256,25 +256,25 @@ describe('POST /users', () => {
 
     request(app)
       .post('/users')
-      .send({email, password})
+      .send({ email, password })
       .expect(200)
       .expect((res) => {
         expect(res.headers['x-auth']).toExist()
-        expect(res.body._id).toExist()
-        expect(res.body.email).toBe(email)
+        expect(res.body.user._id).toExist()
+        expect(res.body.user.email).toBe(email)
       })
       .end((err) => {
         if (err) {
           return done(err)
         }
 
-        User.findOne({email}).then((user) => {
+        User.findOne({ email }).then((user) => {
           expect(user).toExist()
           expect(user.password).toNotBe(password)
           done()
         }).catch((e) => done(e))
       })
-  
+
   })
 
   it('should return validation errors if request invalid', (done) => {
