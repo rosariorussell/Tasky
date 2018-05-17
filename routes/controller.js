@@ -3,7 +3,6 @@ const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
-const cors = require('cors')
 
 // Model dependencies
 var { mongoose } = require('./../config/mongoose')
@@ -11,15 +10,9 @@ var { Task } = require('./../models/task')
 var { User } = require('./../models/user')
 var { authenticate } = require('./authenticate')
 
-
-const corsOptions = {
-  origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
 var app = express()
 
-app.post('/tasks', cors(corsOptions), authenticate, (req, res) => {
+app.post('/tasks', authenticate, (req, res) => {
   var task = new Task({
     title: req.body.title,
     _creator: req.user._id
@@ -41,7 +34,7 @@ app.post('/tasks', cors(corsOptions), authenticate, (req, res) => {
   })
 })
 
-app.get('/tasks', cors(corsOptions), authenticate, (req, res) => {
+app.get('/tasks', authenticate, (req, res) => {
   Task.find({
     _creator: req.user._id
   }).then((tasks) => {
@@ -51,7 +44,7 @@ app.get('/tasks', cors(corsOptions), authenticate, (req, res) => {
   })
 })
 
-app.get('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
+app.get('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
 
   if (!ObjectID.isValid(id)) {
@@ -72,7 +65,7 @@ app.get('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
   })
 })
 
-app.delete('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
+app.delete('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
 
   if (!ObjectID.isValid(id)) {
@@ -93,7 +86,7 @@ app.delete('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
   })
 })
 
-app.patch('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
+app.patch('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
   var body = _.pick(req.body, ['title', 'text', 'tags', 'completed', 'dueDate'])
 
@@ -123,7 +116,7 @@ app.patch('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
   })
 })
 
-app.post('/users', cors(corsOptions), (req, res) => {
+app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
   var user = new User(body)
   console.log(body)
@@ -137,11 +130,11 @@ app.post('/users', cors(corsOptions), (req, res) => {
   })
 })
 
-app.get('/users/me', cors(corsOptions), authenticate, (req, res) => {
+app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user)
 })
 
-app.post('/users/login', cors(corsOptions), (req, res) => {
+app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
 
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -153,7 +146,7 @@ app.post('/users/login', cors(corsOptions), (req, res) => {
   })
 })
 
-app.delete('/users/me/token', cors(corsOptions), authenticate, (req, res) => {
+app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
     res.status(200).send()
   }), () => {
