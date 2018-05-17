@@ -7,7 +7,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 var app = express()
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Set Handlebars
 var exphbs = require("express-handlebars");
@@ -25,4 +25,4 @@ app.listen(port, () => {
   console.log(`Start on port ${port}`)
 })
 
-module.exports = {app}
+module.exports = { app }

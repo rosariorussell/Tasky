@@ -2,13 +2,13 @@
 const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
-const {ObjectID} = require('mongodb')
+const { ObjectID } = require('mongodb')
 
 // Model dependencies
-var {mongoose} = require('./../config/mongoose')
-var {Task} = require('./../models/task')
-var {User} = require('./../models/user')
-var {authenticate} = require('./authenticate')
+var { mongoose } = require('./../config/mongoose')
+var { Task } = require('./../models/task')
+var { User } = require('./../models/user')
+var { authenticate } = require('./authenticate')
 
 var app = express()
 
@@ -29,7 +29,7 @@ app.get('/tasks', authenticate, (req, res) => {
   Task.find({
     _creator: req.user._id
   }).then((tasks) => {
-    res.send({tasks})
+    res.send({ tasks })
   }, (e) => {
     res.status(400).send(e)
   })
@@ -50,7 +50,7 @@ app.get('/tasks/:id', authenticate, (req, res) => {
       return res.status(404).send()
     }
 
-    res.send({task})
+    res.send({ task })
   }).catch((e) => {
     res.status(400).send()
   })
@@ -71,16 +71,18 @@ app.delete('/tasks/:id', authenticate, (req, res) => {
       return res.status(404).send()
     }
 
-    res.send({task})
+    res.send({ task })
   }).catch((e) => {
     res.status(400).send()
   })
 })
 
-app.patch('/tasks/:id', authenticate,  (req, res) => {
+app.patch('/tasks/:id', authenticate, (req, res) => {
   var id = req.params.id
   var body = _.pick(req.body, ['text', 'completed'])
-  body.completed = JSON.parse(body.completed)
+  if (body.completed) {
+    body.completed = JSON.parse(body.completed)
+  }
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send()
@@ -93,12 +95,12 @@ app.patch('/tasks/:id', authenticate,  (req, res) => {
     body.completedAt = null
   }
 
-  Task.findOneAndUpdate({_id: id, _creator: req.user._id}, {$set: body}, {new: true}).then((task) => {
+  Task.findOneAndUpdate({ _id: id, _creator: req.user._id }, { $set: body }, { new: true }).then((task) => {
     if (!task) {
       return res.status(404).send()
     }
 
-    res.send({task})
+    res.send({ task })
   }).catch((e) => {
     res.status(400).send()
   })
