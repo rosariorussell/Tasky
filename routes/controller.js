@@ -1,11 +1,9 @@
 // Module dependencies
 const _ = require('lodash')
 const express = require('express')
-const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
 
 // Model dependencies
-var { mongoose } = require('./../config/mongoose')
 var { Task } = require('./../models/task')
 var { User } = require('./../models/user')
 var { authenticate } = require('./authenticate')
@@ -51,7 +49,7 @@ app.get('/tasks/:id', authenticate, (req, res) => {
     }
 
     res.send({ task })
-  }).catch((e) => {
+  }).catch(() => {
     res.status(400).send()
   })
 })
@@ -72,7 +70,7 @@ app.delete('/tasks/:id', authenticate, (req, res) => {
     }
 
     res.send({ task })
-  }).catch((e) => {
+  }).catch(() => {
     res.status(400).send()
   })
 })
@@ -101,7 +99,7 @@ app.patch('/tasks/:id', authenticate, (req, res) => {
     }
 
     res.send({ task })
-  }).catch((e) => {
+  }).catch(() => {
     res.status(400).send()
   })
 })
@@ -131,7 +129,7 @@ app.post('/users/login', (req, res) => {
     user.generateAuthToken().then((token) => {
       res.header('x-auth', token).send({ user, token })
     })
-  }).catch((e) => {
+  }).catch(() => {
     res.status(400).send()
   })
 })

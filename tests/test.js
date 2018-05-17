@@ -23,7 +23,7 @@ describe('POST /tasks', () => {
       .expect((res) => {
         expect(res.body.text).toBe(text)
       })
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
@@ -42,7 +42,7 @@ describe('POST /tasks', () => {
       .set('x-auth', users[0].tokens[0].token)
       .send({})
       .expect(400)
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
@@ -118,7 +118,7 @@ describe('DELETE /tasks/:id', () => {
       .expect((res) => {
         expect(res.body.task._id).toBe(hexId)
       })
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
@@ -137,7 +137,7 @@ describe('DELETE /tasks/:id', () => {
       .delete(`/tasks/${hexId}`)
       .set('x-auth', users[1].tokens[0].token)
       .expect(404)
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
@@ -338,7 +338,7 @@ describe('POST /users/login', () => {
       .expect((res) => {
         expect(res.headers['x-auth']).toNotExist()
       })
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
@@ -357,7 +357,7 @@ describe('DELETE /users/me/token', () => {
       .delete('/users/me/token')
       .set('x-auth', users[0].tokens[0].token)
       .expect(200)
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           return done(err)
         }
