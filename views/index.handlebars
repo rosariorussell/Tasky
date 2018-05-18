@@ -1,4 +1,6 @@
-<a href="/register">New User</a> || <a href="/login">Login</a> || <a href="/login" id="logoutButton">Logout</a>
+<a href="/register">New User</a> ||
+<a href="/login">Login</a> ||
+<a href="/login" id="logoutButton">Logout</a>
 
 <br>
 <br>
@@ -8,33 +10,33 @@
 <br>
 <br>
 
-  <form>
-    <input type="text" name="text" id="text1-field" placeholder="task description">
-    <input type="submit" value="Add a task" id="addTask">
-  </form>
+<form>
+  <input type="text" name="title" id="text1-field" placeholder="task description">
+  <input type="submit" value="Add a task" id="addTask">
+</form>
 
 <br>
 
-  <form>
-    <input type="text" name="id" id="id2-field" placeholder="task id">
-    <input type="submit" value="Delete a task" id="deleteTask">
-  </form>
+<form>
+  <input type="text" name="id" id="id2-field" placeholder="task id">
+  <input type="submit" value="Delete a task" id="deleteTask">
+</form>
 
 <br>
 
-  <form>
-    <input type="text" name="id" id="id3-field" placeholder="task id">
-    <input type="submit" value="Complete a task" id="completeTask">
-  </form>
+<form>
+  <input type="text" name="id" id="id3-field" placeholder="task id">
+  <input type="submit" value="Complete a task" id="completeTask">
+</form>
 
 
 <br>
 
-  <form>
-    <input type="text" name="id" id="id4-field" placeholder="task id">
-    <input type="text" name="text" id="text4-field" placeholder="updated task description">    
-    <input type="submit" value="Update a task" id="updateTask">
-  </form>
+<form>
+  <input type="text" name="id" id="id4-field" placeholder="task id">
+  <input type="text" name="title" id="text4-field" placeholder="updated task description">
+  <input type="submit" value="Update a task" id="updateTask">
+</form>
 
 <script>
   $(function () {
@@ -79,8 +81,8 @@
       $.ajax("/tasks", {
         type: "POST",
         data: {
-            text: $("#text1-field").val().trim()
-          },
+          title: $("#text1-field").val().trim()
+        },
         headers: { 'x-auth': xAuth },
         success: function (data, status, xhr) {
           $("#text1-field").val('')
@@ -91,7 +93,7 @@
       })
     })
 
-        $("#deleteTask").on("click", function (event) {
+    $("#deleteTask").on("click", function (event) {
       event.preventDefault()
       var xAuth = localStorage.getItem("x-auth")
       var id = $("#id2-field").val().trim()
@@ -107,7 +109,7 @@
       })
     })
 
-        $("#completeTask").on("click", function (event) {
+    $("#completeTask").on("click", function (event) {
       event.preventDefault()
       var xAuth = localStorage.getItem("x-auth")
       var id = $("#id3-field").val().trim()
@@ -126,19 +128,19 @@
       })
     })
 
-        $("#updateTask").on("click", function (event) {
+    $("#updateTask").on("click", function (event) {
       event.preventDefault()
       var xAuth = localStorage.getItem("x-auth")
-      var id = $("#id4-field").val().trim()      
+      var id = $("#id4-field").val().trim()
       $.ajax("/tasks/" + id, {
         type: "PATCH",
         data: {
-            text: $("#text4-field").val().trim()            
-          },
+          title: $("#text4-field").val().trim()
+        },
         headers: { 'x-auth': xAuth },
         success: function (data, status, xhr) {
           $("#id4-field").val('')
-          $("#text4-field").val('')          
+          $("#text4-field").val('')
           // var auth = xhr.getResponseHeader('x-auth')
           // console.log(localStorage.getItem("x-auth"))
           // window.location.href = '/mytasks'
