@@ -13,7 +13,7 @@ var { authenticate } = require('./authenticate')
 var app = express()
 const cors = require('cors')
 var corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: 'https://oxytasky.herokuapp.com',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(function (req, res, next) {
