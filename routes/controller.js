@@ -11,6 +11,8 @@ var { User } = require('./../models/user')
 var { authenticate } = require('./authenticate')
 
 var app = express()
+
+// CORS is being used because Angular front end is deployed on a different heroku server
 const cors = require('cors')
 var corsOptions = {
   origin: 'https://oxytasky.herokuapp.com',
@@ -131,7 +133,6 @@ app.patch('/tasks/:id', cors(corsOptions), authenticate, (req, res) => {
 app.post('/users', cors(corsOptions), (req, res) => {
   var body = _.pick(req.body, ['email', 'password'])
   var user = new User(body)
-  console.log(body)
 
   user.save().then(() => {
     return user.generateAuthToken()
