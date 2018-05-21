@@ -1,8 +1,6 @@
 # Tasky - Productivity app
 
-### Created by Russell Rosario, Daniel Garces, and Adrian Fernandez
-
-#### Project #2 for University of Miami's Full Stack Web Developer bootcamp 
+#### Project #2 for University of Miami's Full Stack Web Developer bootcamp completed in 1 week 
 
 ##### This repository is for the backend ONLY. Backend API fully functional at https://agile-taiga-82794.herokuapp.com/
 
