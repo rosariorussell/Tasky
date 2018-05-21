@@ -6,4 +6,4 @@
 
 ##### Project and presentation completed in a week for University of Miami's Full Stack Web Developer bootcamp 
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://docs.google.com/presentation/d/1MH9Oa4iQuBUfZH_5vO2Tbf8qnHA_U483_b1CaZaCsKw/edit#slide=id.g35872ae762_0_50 "Logo Title Text 1")
