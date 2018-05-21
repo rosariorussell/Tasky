@@ -6,4 +6,4 @@
 
 ##### Project and presentation completed in a week for University of Miami's Full Stack Web Developer bootcamp 
 
-![alt text](https://s3.amazonaws.com/rosariorussell-images/logo.PNG "Tasky Logo")
+!(https://s3.amazonaws.com/github-tasky/1.png)
